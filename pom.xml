@@ -50,6 +50,12 @@
             <artifactId>spring-boot-starter-hateoas</artifactId>
         </dependency>
 
+        <!-- Basic Security -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
         <!-- I18N INternationalization -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
