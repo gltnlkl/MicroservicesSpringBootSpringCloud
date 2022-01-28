@@ -20,9 +20,11 @@ public class UserJPAResource {
 
     //@Autowired
     private final UserRepository userRepository;
+    private final PostRepository postRepository;
 
-    public UserJPAResource(UserRepository userRepository) {
+    public UserJPAResource(UserRepository userRepository, PostRepository postRepository) {
         this.userRepository = userRepository;
+        this.postRepository = postRepository;
     }
 
 
@@ -85,9 +87,9 @@ public class UserJPAResource {
         return ResponseEntity.ok(updatedUser);
     }
 
-
+    //http://localhost:8080/jpa/users/1/posts   -->get
     @GetMapping("/jpa/users/{id}/posts")
-    public List<Post> retrieveAllUsers(@PathVariable(value = "id") int id) {
+    public List<Post> retrieveAllUsersPosts(@PathVariable(value = "id") int id) {
 
         Optional<User> userOptional = userRepository.findById(id);
 
@@ -95,5 +97,28 @@ public class UserJPAResource {
             throw new UserNotFoundException("id-" + id);
         }
         return userOptional.get().getPosts();
+    }
+
+
+    //http://localhost:8080/jpa/users/1/posts   -->post
+    @PostMapping("/jpa/users/{id}/posts")
+    public ResponseEntity<Object> createPost(@PathVariable(value = "id") int id, @RequestBody Post post) {
+        Optional<User> userOptional = userRepository.findById(id);
+        if (userOptional.isEmpty()) {
+            throw new UserNotFoundException("id-" + id);
+        }
+
+        User user = userOptional.get();
+
+        post.setUser(user);
+        postRepository.save(post);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(post.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).build();
     }
 }
