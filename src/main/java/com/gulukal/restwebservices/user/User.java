@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
@@ -19,7 +20,7 @@ import java.util.Date;
 public class User {
 
     @Id
-    @GeneratedValue()
+    @GeneratedValue (strategy = GenerationType.IDENTITY) //--> no need to give id to create new role even if you give id it will be ignore and go on
     private int id = 0;
     //filter
     @Size(min = 2, message = "Name should have atlleast 2 characters")

@@ -63,9 +63,11 @@ public class UserJPAResource {
     public ResponseEntity<Object> createUser(@Valid @RequestBody User user) {
         User savedUser = userRepository.save(user);
 
-        // CREATED
-        // /user/{id}  saveduser.getId
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(savedUser.getId()).toUri();
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(savedUser.getId())
+                .toUri();
 
         return ResponseEntity.created(location).build();
     }
