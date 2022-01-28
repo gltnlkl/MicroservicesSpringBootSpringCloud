@@ -1,6 +1,8 @@
 package com.gulukal.restwebservices.user;
 
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -10,6 +12,9 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 public class UserJPAResource {
@@ -35,11 +40,15 @@ public class UserJPAResource {
     // /users/1
     //retrieveUser(int id)
     @GetMapping("/jpa/users/{id}")
-    public ResponseEntity<User> retrieveUser(@PathVariable(value = "id") int id) {
+    public EntityModel<User> retrieveUser(@PathVariable(value = "id") int id) {
 
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("Instructor not found :: " + id));
-        return ResponseEntity.ok().body(user);
+        //hateos --> href to all-users
+        EntityModel<User> model = EntityModel.of(user);
+        WebMvcLinkBuilder linkToUsers = linkTo(methodOn(this.getClass()).retrieveAllUsers());
+        model.add(linkToUsers.withRel("all-users"));
+        return model;
     }
 
     //DELETE
