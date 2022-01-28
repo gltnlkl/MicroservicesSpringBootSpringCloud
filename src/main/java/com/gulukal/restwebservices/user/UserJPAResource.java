@@ -9,9 +9,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -54,15 +52,9 @@ public class UserJPAResource {
     //DELETE
 
     @DeleteMapping("/jpa/users/{id}")
-    public Map<String, Boolean> deleteUser(
-            @PathVariable(value = "id") int id) throws ResourceNotFoundException {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Instructor not found :: " + id));
-
-        userRepository.delete(user);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return response;
+    public void deleteUser(
+            @PathVariable(value = "id") int id) {
+        userRepository.deleteById(id);
     }
 
     //CREATED
