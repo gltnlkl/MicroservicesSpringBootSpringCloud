@@ -1,5 +1,6 @@
 package com.gulukal.restwebservices.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,6 +21,7 @@ public class Post {
 
     //one to many relation from many side
     @ManyToOne(fetch = FetchType.LAZY)  // get user demedikce user i cagirmayacak
+    @JsonIgnore
     private User user;
 
 

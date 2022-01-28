@@ -10,6 +10,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -82,5 +83,17 @@ public class UserJPAResource {
         user.setName(userDetails.getName());
         final User updatedUser = userRepository.save(user);
         return ResponseEntity.ok(updatedUser);
+    }
+
+
+    @GetMapping("/jpa/users/{id}/posts")
+    public List<Post> retrieveAllUsers(@PathVariable(value = "id") int id) {
+
+        Optional<User> userOptional = userRepository.findById(id);
+
+        if (userOptional.isEmpty()) {
+            throw new UserNotFoundException("id-" + id);
+        }
+        return userOptional.get().getPosts();
     }
 }

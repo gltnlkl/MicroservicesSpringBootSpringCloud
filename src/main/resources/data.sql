@@ -11,4 +11,4 @@ insert into post
 values (1, 'My First Post', 1);
 insert
 into post
-values (2, 'My Second Post', 2);
+values (2, 'My Second Post', 1);
